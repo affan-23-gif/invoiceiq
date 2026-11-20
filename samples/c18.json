@@ -1,0 +1,47 @@
+{
+  "id": "c18",
+  "file": "c18.pdf",
+  "layout": "classic",
+  "kind": "pdf",
+  "note": "Vendor name misspelled ('Harbour ... Supplies'); matched by fuzzy name + PO.",
+  "requires": [],
+  "expect": {
+    "decision": "auto_approved",
+    "issues": []
+  },
+  "truth": {
+    "vendor_name": "Harbour Office Supplies",
+    "vendor_tax_id": "US-41-2290871",
+    "invoice_number": "HOS-21102",
+    "invoice_date": "2026-11-19",
+    "due_date": "2026-12-19",
+    "po_number": "PO-1042",
+    "currency": "USD",
+    "line_items": [
+      {
+        "sku": "HOS-PAP-A4",
+        "description": "A4 copy paper, 5-ream box",
+        "quantity": 20,
+        "unit_price": 6.5,
+        "amount": 130.0
+      },
+      {
+        "sku": "HOS-TON-58",
+        "description": "Toner cartridge 58A",
+        "quantity": 6,
+        "unit_price": 89.0,
+        "amount": 534.0
+      },
+      {
+        "sku": "HOS-ORG-3",
+        "description": "Desk organizer, 3 tier",
+        "quantity": 10,
+        "unit_price": 14.25,
+        "amount": 142.5
+      }
+    ],
+    "subtotal": 806.5,
+    "tax": 66.54,
+    "total": 873.04
+  }
+}

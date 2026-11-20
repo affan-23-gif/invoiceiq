@@ -1,0 +1,43 @@
+{
+  "id": "c10",
+  "file": "c10.pdf",
+  "layout": "modern",
+  "kind": "pdf",
+  "note": "Vendor is not in the approved vendor list.",
+  "requires": [],
+  "expect": {
+    "decision": "needs_review",
+    "issues": [
+      "NO_PO",
+      "UNKNOWN_VENDOR"
+    ]
+  },
+  "truth": {
+    "vendor_name": "Bluejay Event Rentals",
+    "vendor_tax_id": null,
+    "invoice_number": "BER-118",
+    "invoice_date": "2026-11-11",
+    "due_date": "2026-12-11",
+    "po_number": null,
+    "currency": "USD",
+    "line_items": [
+      {
+        "sku": "",
+        "description": "Folding tables (event)",
+        "quantity": 12,
+        "unit_price": 18.0,
+        "amount": 216.0
+      },
+      {
+        "sku": "",
+        "description": "Delivery and pickup",
+        "quantity": 1,
+        "unit_price": 140.0,
+        "amount": 140.0
+      }
+    ],
+    "subtotal": 356.0,
+    "tax": 21.36,
+    "total": 377.36
+  }
+}

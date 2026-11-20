@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: invoiceiq
+    runtime: docker
+    plan: free
+    autoDeploy: true
+    healthCheckPath: /api/health
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: LLM_PROVIDER
+        value: gemini
+      - key: GEMINI_RPM
+        value: "12"
+      - key: TRUST_PROXY
+        value: "true"
+      - key: UPLOAD_RATE_LIMIT
+        value: "10"
+      - key: DEMO_RESET_ON_START
+        value: "true"

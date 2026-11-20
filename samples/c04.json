@@ -1,0 +1,40 @@
+{
+  "id": "c04",
+  "file": "c04.pdf",
+  "layout": "compact",
+  "kind": "pdf",
+  "note": "Euro invoice with German VAT and 1.234,56 number format.",
+  "requires": [],
+  "expect": {
+    "decision": "auto_approved",
+    "issues": []
+  },
+  "truth": {
+    "vendor_name": "Cobalt IT Services GmbH",
+    "vendor_tax_id": "DE318274551",
+    "invoice_number": "CIT-2026-1107",
+    "invoice_date": "2026-11-06",
+    "due_date": "2026-12-06",
+    "po_number": "PO-1045",
+    "currency": "EUR",
+    "line_items": [
+      {
+        "sku": "CIT-MSP-OCT",
+        "description": "Managed IT support, October",
+        "quantity": 1,
+        "unit_price": 2400.0,
+        "amount": 2400.0
+      },
+      {
+        "sku": "CIT-SETUP",
+        "description": "Laptop setup and imaging",
+        "quantity": 4,
+        "unit_price": 75.0,
+        "amount": 300.0
+      }
+    ],
+    "subtotal": 2700.0,
+    "tax": 513.0,
+    "total": 3213.0
+  }
+}

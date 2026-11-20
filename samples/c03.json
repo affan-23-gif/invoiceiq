@@ -1,0 +1,47 @@
+{
+  "id": "c03",
+  "file": "c03.pdf",
+  "layout": "compact",
+  "kind": "pdf",
+  "note": "European layout and date format.",
+  "requires": [],
+  "expect": {
+    "decision": "auto_approved",
+    "issues": []
+  },
+  "truth": {
+    "vendor_name": "Maple & Finch Packaging Ltd",
+    "vendor_tax_id": "US-52-6610934",
+    "invoice_number": "MF/2026/0871",
+    "invoice_date": "2026-11-05",
+    "due_date": "2026-12-05",
+    "po_number": "PO-1044",
+    "currency": "USD",
+    "line_items": [
+      {
+        "sku": "MFP-BX-1812",
+        "description": "Shipping box 18x12x12",
+        "quantity": 500,
+        "unit_price": 1.18,
+        "amount": 590.0
+      },
+      {
+        "sku": "MFP-TP-48C",
+        "description": "Packing tape 48mm clear",
+        "quantity": 48,
+        "unit_price": 3.4,
+        "amount": 163.2
+      },
+      {
+        "sku": "MFP-VF-10",
+        "description": "Void fill paper roll",
+        "quantity": 20,
+        "unit_price": 22.0,
+        "amount": 440.0
+      }
+    ],
+    "subtotal": 1193.2,
+    "tax": 77.56,
+    "total": 1270.76
+  }
+}

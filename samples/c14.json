@@ -1,0 +1,194 @@
+{
+  "id": "c14",
+  "file": "c14.pdf",
+  "layout": "classic",
+  "kind": "pdf",
+  "note": "Long invoice with 24 line items.",
+  "requires": [],
+  "expect": {
+    "decision": "auto_approved",
+    "issues": []
+  },
+  "truth": {
+    "vendor_name": "Maple & Finch Packaging Ltd",
+    "vendor_tax_id": "US-52-6610934",
+    "invoice_number": "MF/2026/0915",
+    "invoice_date": "2026-11-15",
+    "due_date": "2026-12-15",
+    "po_number": "PO-1049",
+    "currency": "USD",
+    "line_items": [
+      {
+        "sku": "MFP-BX-1010",
+        "description": "Shipping box 10x10x10",
+        "quantity": 20,
+        "unit_price": 1.02,
+        "amount": 20.4
+      },
+      {
+        "sku": "MFP-BX-1208",
+        "description": "Shipping box 12x12x8",
+        "quantity": 20,
+        "unit_price": 1.09,
+        "amount": 21.8
+      },
+      {
+        "sku": "MFP-BX-1612",
+        "description": "Shipping box 16x12x12",
+        "quantity": 20,
+        "unit_price": 1.21,
+        "amount": 24.2
+      },
+      {
+        "sku": "MFP-BX-2016",
+        "description": "Shipping box 20x16x16",
+        "quantity": 20,
+        "unit_price": 1.64,
+        "amount": 32.8
+      },
+      {
+        "sku": "MFP-BX-2424",
+        "description": "Shipping box 24x24x24",
+        "quantity": 20,
+        "unit_price": 2.38,
+        "amount": 47.6
+      },
+      {
+        "sku": "MFP-ML-0609",
+        "description": "Poly mailer 6x9",
+        "quantity": 100,
+        "unit_price": 0.14,
+        "amount": 14.0
+      },
+      {
+        "sku": "MFP-ML-1013",
+        "description": "Poly mailer 10x13",
+        "quantity": 100,
+        "unit_price": 0.19,
+        "amount": 19.0
+      },
+      {
+        "sku": "MFP-ML-1419",
+        "description": "Poly mailer 14x19",
+        "quantity": 100,
+        "unit_price": 0.27,
+        "amount": 27.0
+      },
+      {
+        "sku": "MFP-BM-0610",
+        "description": "Bubble mailer 6x10",
+        "quantity": 100,
+        "unit_price": 0.36,
+        "amount": 36.0
+      },
+      {
+        "sku": "MFP-BM-0915",
+        "description": "Bubble mailer 9x15",
+        "quantity": 100,
+        "unit_price": 0.48,
+        "amount": 48.0
+      },
+      {
+        "sku": "MFP-TP-48C",
+        "description": "Packing tape 48mm clear",
+        "quantity": 20,
+        "unit_price": 3.4,
+        "amount": 68.0
+      },
+      {
+        "sku": "MFP-TP-48B",
+        "description": "Packing tape 48mm brown",
+        "quantity": 20,
+        "unit_price": 3.4,
+        "amount": 68.0
+      },
+      {
+        "sku": "MFP-TP-72C",
+        "description": "Packing tape 72mm clear",
+        "quantity": 20,
+        "unit_price": 4.95,
+        "amount": 99.0
+      },
+      {
+        "sku": "MFP-DS-TAPE",
+        "description": "Tape dispenser",
+        "quantity": 20,
+        "unit_price": 11.9,
+        "amount": 238.0
+      },
+      {
+        "sku": "MFP-VF-10",
+        "description": "Void fill paper roll",
+        "quantity": 20,
+        "unit_price": 22.0,
+        "amount": 440.0
+      },
+      {
+        "sku": "MFP-BW-12",
+        "description": "Bubble wrap 12in roll",
+        "quantity": 20,
+        "unit_price": 18.6,
+        "amount": 372.0
+      },
+      {
+        "sku": "MFP-BW-24",
+        "description": "Bubble wrap 24in roll",
+        "quantity": 20,
+        "unit_price": 31.2,
+        "amount": 624.0
+      },
+      {
+        "sku": "MFP-LB-4X6",
+        "description": "Shipping labels 4x6 (500)",
+        "quantity": 20,
+        "unit_price": 16.75,
+        "amount": 335.0
+      },
+      {
+        "sku": "MFP-ST-FR",
+        "description": "Fragile stickers (500)",
+        "quantity": 20,
+        "unit_price": 7.8,
+        "amount": 156.0
+      },
+      {
+        "sku": "MFP-ST-UP",
+        "description": "This side up stickers (500)",
+        "quantity": 20,
+        "unit_price": 7.8,
+        "amount": 156.0
+      },
+      {
+        "sku": "MFP-CN-08",
+        "description": "Corner protectors (100)",
+        "quantity": 20,
+        "unit_price": 12.4,
+        "amount": 248.0
+      },
+      {
+        "sku": "MFP-SF-18",
+        "description": "Stretch film 18in",
+        "quantity": 20,
+        "unit_price": 24.9,
+        "amount": 498.0
+      },
+      {
+        "sku": "MFP-SF-HD",
+        "description": "Stretch film handle",
+        "quantity": 20,
+        "unit_price": 6.25,
+        "amount": 125.0
+      },
+      {
+        "sku": "MFP-PL-48",
+        "description": "Pallet wrap 48in",
+        "quantity": 20,
+        "unit_price": 41.0,
+        "amount": 820.0
+      }
+    ],
+    "subtotal": 4537.8,
+    "tax": 294.96,
+    "total": 4832.76
+  }
+}

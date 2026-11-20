@@ -1,0 +1,47 @@
+{
+  "id": "c02",
+  "file": "c02.pdf",
+  "layout": "modern",
+  "kind": "pdf",
+  "note": "Freight invoice, no tax, US date format.",
+  "requires": [],
+  "expect": {
+    "decision": "auto_approved",
+    "issues": []
+  },
+  "truth": {
+    "vendor_name": "Kestrel Logistics Inc.",
+    "vendor_tax_id": "US-88-1034456",
+    "invoice_number": "KL-55120",
+    "invoice_date": "2026-11-04",
+    "due_date": "2026-12-04",
+    "po_number": "PO-1043",
+    "currency": "USD",
+    "line_items": [
+      {
+        "sku": "KL-LTL-CHI-DEN",
+        "description": "LTL freight Chicago to Denver",
+        "quantity": 1,
+        "unit_price": 1240.0,
+        "amount": 1240.0
+      },
+      {
+        "sku": "KL-LIFT",
+        "description": "Liftgate delivery fee",
+        "quantity": 1,
+        "unit_price": 85.0,
+        "amount": 85.0
+      },
+      {
+        "sku": "KL-FUEL",
+        "description": "Fuel surcharge",
+        "quantity": 1,
+        "unit_price": 96.2,
+        "amount": 96.2
+      }
+    ],
+    "subtotal": 1421.2,
+    "tax": 0.0,
+    "total": 1421.2
+  }
+}

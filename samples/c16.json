@@ -1,0 +1,40 @@
+{
+  "id": "c16",
+  "file": "c16.pdf",
+  "layout": "modern",
+  "kind": "pdf",
+  "note": "PO number written as 'P.O. #1046'; partial delivery.",
+  "requires": [],
+  "expect": {
+    "decision": "auto_approved",
+    "issues": []
+  },
+  "truth": {
+    "vendor_name": "Sunrise Coffee Roasters",
+    "vendor_tax_id": "US-27-5519034",
+    "invoice_number": "SCR-4440",
+    "invoice_date": "2026-11-17",
+    "due_date": "2026-12-17",
+    "po_number": "P.O. #1046",
+    "currency": "USD",
+    "line_items": [
+      {
+        "sku": "SCR-ESP-1",
+        "description": "Espresso blend beans 1kg",
+        "quantity": 12,
+        "unit_price": 24.5,
+        "amount": 294.0
+      },
+      {
+        "sku": "SCR-DEC-1",
+        "description": "Decaf beans 1kg",
+        "quantity": 4,
+        "unit_price": 26.0,
+        "amount": 104.0
+      }
+    ],
+    "subtotal": 398.0,
+    "tax": 0.0,
+    "total": 398.0
+  }
+}

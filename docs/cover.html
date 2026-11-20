@@ -1,0 +1,43 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; }
+  body { width: 1600px; height: 1000px; background: #f3f6f5; font-family: Inter, "Segoe UI", system-ui, sans-serif; color: #12201e; position: relative; overflow: hidden; }
+  h1 { position: absolute; left: 64px; top: 56px; font-size: 46px; letter-spacing: -.5px; }
+  .sub { position: absolute; left: 64px; top: 122px; font-size: 22px; color: #56625f; }
+  .pill { position: absolute; left: 64px; top: 164px; font-size: 15px; font-weight: 600; color: #0f5f58; background: #dcefec; padding: 6px 14px; border-radius: 999px; }
+  .box { position: absolute; background: #fff; border: 2px solid #d5dedc; border-radius: 14px; padding: 18px 20px; }
+  .box b { display: block; font-size: 22px; margin-bottom: 6px; } .box span { font-size: 16.5px; color: #4b5856; line-height: 1.4; }
+  .ai { background: #eef1fd; border-color: #4a5bd4; } .rules { background: #eef7f5; border-color: #0f766e; }
+  .ok { background: #e9f6ee; border-color: #2f8a55; } .rev { background: #fff6e6; border-color: #d99a2b; }
+  svg { position: absolute; left: 0; top: 0; }
+  .lbl { position: absolute; font-size: 15px; font-weight: 700; color: #56625f; }
+  .stat { position: absolute; top: 742px; width: 270px; background: #0b2a27; color: #fff; border-radius: 12px; padding: 14px 18px; }
+  .stat b { display: block; font-size: 26px; } .stat span { font-size: 15px; color: #a9c4bf; }
+  .foot { position: absolute; left: 64px; top: 875px; font-size: 15px; letter-spacing: 1.5px; font-weight: 700; color: #56625f; }
+  .chips { position: absolute; left: 64px; top: 905px; display: flex; gap: 9px; }
+  .chips div { background: #0f766e; color: #fff; font-size: 16px; font-weight: 600; padding: 9px 13px; border-radius: 10px; }
+</style></head>
+<body>
+  <h1>InvoiceIQ: invoices in, approved bills out</h1>
+  <div class="sub">AI reads any invoice, plain-code rules check it, purchase orders are matched, people only see the exceptions</div>
+  <div class="pill">Demo project · fictional buyer · Python · Gemini (PDF + image) · FastAPI · rapidfuzz · n8n-ready</div>
+  <svg width="1600" height="1000"><defs><marker id="a" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#7d8a87"/></marker></defs>
+    <g stroke="#7d8a87" stroke-width="2.5" fill="none" marker-end="url(#a)">
+      <path d="M294 405 L336 405"/><path d="M596 405 L638 405"/><path d="M928 405 L970 405"/>
+      <path d="M1250 360 C 1300 330, 1300 300, 1318 290"/><path d="M1250 450 C 1300 480, 1300 520, 1318 540"/>
+      <path d="M1440 610 L1440 370"/>
+    </g></svg>
+  <div class="lbl" style="left:1256px;top:268px">clean</div><div class="lbl" style="left:1238px;top:530px">issues</div>
+  <div class="box" style="left:64px;top:330px;width:230px;height:150px"><b>PDF or photo</b><span>Upload, email via n8n, or API. Any layout, US or EU formats.</span></div>
+  <div class="box ai" style="left:336px;top:315px;width:260px;height:180px"><b>Gemini reads it</b><span>Vendor, dates, PO, every line, tax and total, exactly as printed.</span></div>
+  <div class="box rules" style="left:638px;top:300px;width:290px;height:210px"><b>Rules check it</b><span>Line maths, totals, dates, duplicates (PDF or scan), values verified against the PDF text.</span></div>
+  <div class="box rules" style="left:970px;top:300px;width:280px;height:210px"><b>Matched to the PO</b><span>Vendor by tax ID or fuzzy name, PO by number or amount, each line for qty left and price ±2%.</span></div>
+  <div class="box ok" style="left:1318px;top:220px;width:230px;height:140px"><b>Auto-approved</b><span>Posted to the PO ledger, CSV or webhook.</span></div>
+  <div class="box rev" style="left:1318px;top:470px;width:230px;height:140px"><b>Review queue</b><span>Reasons shown, fix fields, approve or reject.</span></div>
+  <div class="stat" style="left:64px"><b>18 test invoices</b><span>3 layouts · 4 scans · 8 planted problems</span></div>
+  <div class="stat" style="left:354px"><b>Field-level eval</b><span>every field and line vs ground truth</span></div>
+  <div class="stat" style="left:644px"><b>vs regex baseline</b><span>which can't read scans or line items</span></div>
+  <div class="foot">BUILT FOR PRODUCTION</div>
+  <div class="chips"><div>Duplicate detection</div><div>Anti-hallucination check</div><div>Fuzzy vendor matching</div><div>PO ledger</div><div>Reviewer audit trail</div><div>Webhook + CSV</div><div>Docker</div><div>39 tests</div></div>
+</body></html>

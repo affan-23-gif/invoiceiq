@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230f766e'/><path d='M10 8h12v16l-3-2-3 2-3-2-3 2z' fill='white'/></svg>">
+<title>InvoiceIQ · AI invoice processing with PO matching</title>
+<style>
+  :root { --bg:#f4f6f5; --card:#fff; --ink:#141a19; --muted:#5b6563; --line:#dfe4e2; --brand:#0f766e;
+    --ok:#157347; --ok-bg:#e7f5ec; --warn:#94590a; --warn-bg:#fff6e5; --bad:#b42318; --bad-bg:#fdeceb; --info-bg:#eef2f7;
+    --mono: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  * { box-sizing: border-box; }
+  body { margin:0; font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif; background:var(--bg); color:var(--ink); }
+  header { background:#0b2a27; color:#fff; padding:12px 22px; display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+  header h1 { margin:0; font-size:18px; } header .sub { color:#a9c4bf; font-size:13px; }
+  header .right { margin-left:auto; display:flex; gap:10px; align-items:center; }
+  .badge { font-size:12px; padding:3px 9px; border-radius:999px; background:#173f3a; color:#cde3df; }
+  button { font:inherit; cursor:pointer; border-radius:8px; border:1px solid var(--line); background:#fff; padding:6px 12px; }
+  button.primary { background:var(--brand); border-color:var(--brand); color:#fff; }
+  button.ok { background:var(--ok); border-color:var(--ok); color:#fff; } button.bad { color:var(--bad); border-color:#f1b8b3; }
+  button.ghost { background:transparent; color:#cde3df; border-color:#2f5a54; }
+  button:disabled { opacity:.5; cursor:default; }
+  .stats { display:flex; gap:10px; padding:14px 22px 0; flex-wrap:wrap; }
+  .stat { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:8px 14px; min-width:130px; }
+  .stat b { display:block; font-size:18px; } .stat span { font-size:12px; color:var(--muted); }
+  main { display:grid; grid-template-columns: 330px minmax(0,1fr); gap:16px; padding:14px 22px 22px; }
+  @media (max-width: 1000px) { main { grid-template-columns: 1fr; } }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin-bottom:14px; }
+  .card h2 { font-size:12px; text-transform:uppercase; letter-spacing:.6px; color:var(--muted); margin:0 0 10px; }
+  .drop { display:block; border:2px dashed #b9c7c4; border-radius:10px; padding:16px; text-align:center; color:var(--muted); cursor:pointer; }
+  .drop.over { border-color:var(--brand); background:#eef8f6; }
+  .samples { display:flex; flex-direction:column; gap:4px; max-height:260px; overflow:auto; margin-top:10px; }
+  .sample { text-align:left; border:1px solid var(--line); border-radius:8px; padding:6px 9px; font-size:12.5px; display:flex; gap:8px; align-items:flex-start; }
+  .sample:hover { background:#f2f7f6; } .sample .id { font-family:var(--mono); color:var(--muted); }
+  .pill { font-size:11px; padding:1px 8px; border-radius:999px; white-space:nowrap; font-weight:600; }
+  .s-auto_approved, .s-approved { background:var(--ok-bg); color:var(--ok); } .s-needs_review { background:var(--warn-bg); color:var(--warn); }
+  .s-rejected, .s-failed { background:var(--bad-bg); color:var(--bad); }
+  .inbox { display:flex; flex-direction:column; gap:4px; max-height:420px; overflow:auto; }
+  .row { display:grid; grid-template-columns: 1fr auto; gap:2px 8px; padding:7px 9px; border-radius:8px; cursor:pointer; border:1px solid transparent; }
+  .row:hover { background:#f2f7f6; } .row.sel { border-color:var(--brand); background:#eef8f6; }
+  .row .v { font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; } .row .m { font-size:12px; color:var(--muted); }
+  .empty { color:var(--muted); font-size:13px; padding:8px 0; }
+  .detail { display:grid; grid-template-columns: minmax(0,1fr) minmax(0,1.05fr); gap:14px; }
+  @media (max-width: 1300px) { .detail { grid-template-columns: 1fr; } }
+  .doc { height: 78vh; min-height:520px; border:1px solid var(--line); border-radius:10px; background:#e9edec; overflow:auto; display:flex; justify-content:center; align-items:flex-start; }
+  .doc iframe { width:100%; height:100%; border:0; } .doc img { max-width:100%; }
+  .banner { border-radius:10px; padding:10px 12px; margin-bottom:10px; font-weight:600; }
+  .banner small { display:block; font-weight:400; color:inherit; opacity:.85; }
+  .b-auto_approved, .b-approved { background:var(--ok-bg); color:var(--ok); } .b-needs_review { background:var(--warn-bg); color:var(--warn); }
+  .b-rejected, .b-failed { background:var(--bad-bg); color:var(--bad); }
+  .issues { list-style:none; margin:0 0 10px; padding:0; display:flex; flex-direction:column; gap:5px; }
+  .issues li { border-radius:8px; padding:6px 9px; font-size:13px; }
+  .issues .error { background:var(--bad-bg); } .issues .warning { background:var(--warn-bg); } .issues .info { background:var(--info-bg); }
+  .issues code { font-family:var(--mono); font-size:11.5px; font-weight:600; margin-right:6px; }
+  .grid { display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:8px 12px; }
+  label.f { display:flex; flex-direction:column; font-size:12px; color:var(--muted); gap:3px; }
+  label.f input { font:inherit; color:var(--ink); padding:6px 8px; border:1px solid var(--line); border-radius:6px; }
+  label.f.flag input, td.flag input { border-color:#e2a49d; background:#fff8f7; }
+  table { width:100%; border-collapse:collapse; font-size:12.5px; }
+  th, td { text-align:left; padding:4px 5px; border-bottom:1px solid var(--line); vertical-align:middle; }
+  th { color:var(--muted); font-weight:600; font-size:11.5px; }
+  td input { width:100%; font:inherit; padding:4px 5px; border:1px solid transparent; border-radius:5px; background:transparent; }
+  td input:focus, td input:hover { border-color:var(--line); background:#fff; }
+  table.lines { table-layout:fixed; } td.num input { text-align:right; } .tag { font-size:11px; color:var(--muted); }
+  .tag.okt { color:var(--ok); } .tag.badt { color:var(--bad); }
+  .actions { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:12px; }
+  .actions input { flex:1; min-width:160px; padding:6px 8px; border:1px solid var(--line); border-radius:6px; font:inherit; }
+  .meta { font-size:12px; color:var(--muted); margin-top:8px; }
+  .match { font-size:13px; display:grid; grid-template-columns:auto 1fr; gap:3px 10px; margin-bottom:10px; }
+  .match dt { color:var(--muted); } .match dd { margin:0; }
+  .msg { padding:8px 10px; border-radius:8px; margin-bottom:10px; font-size:13px; }
+  .msg.err { background:var(--bad-bg); color:var(--bad); }
+  .spinner { display:inline-block; width:12px; height:12px; border:2px solid #c9d6d3; border-top-color:var(--brand); border-radius:50%; animation:spin .8s linear infinite; vertical-align:-2px; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .welcome { color:var(--muted); line-height:1.6; }
+  .welcome b { color:var(--ink); }
+</style>
+</head>
+<body>
+<header>
+  <div><h1>InvoiceIQ</h1><div class="sub">AI reads supplier invoices · rules check the math · matched to purchase orders · humans review exceptions</div></div>
+  <div class="right">
+    <span class="badge" id="extractor">extractor: …</span>
+    <span class="badge">Demo · fictional buyer "Brightline Supply"</span>
+    <a class="badge" href="/api/export.csv" style="text-decoration:none">Export approved CSV</a>
+    <button class="ghost" id="reset">Reset demo</button>
+  </div>
+</header>
+
+<div class="stats">
+  <div class="stat"><b id="stTotal">0</b><span>invoices processed</span></div>
+  <div class="stat"><b id="stAuto">–</b><span>auto-approved (touchless)</span></div>
+  <div class="stat"><b id="stReview">0</b><span>waiting for review</span></div>
+  <div class="stat"><b id="stRejected">0</b><span>rejected</span></div>
+  <div class="stat"><b id="stCost">$0</b><span>total AI cost</span></div>
+</div>
+
+<main>
+  <aside>
+    <div class="card">
+      <h2>Add invoices</h2>
+      <label class="drop" id="drop">
+        <input type="file" id="file" accept="application/pdf,image/png,image/jpeg,image/webp" hidden multiple>
+        <div><b>Drop PDF or photo here</b><br><span style="font-size:12px">or click to choose · max 8 MB</span></div>
+      </label>
+      <div style="margin-top:12px;font-size:12.5px;color:var(--muted)">Or try one of 18 sample invoices (3 layouts, scans, and invoices with planted problems):</div>
+      <div class="samples" id="samples"></div>
+    </div>
+    <div class="card">
+      <h2>Inbox</h2>
+      <div class="inbox" id="inbox"><div class="empty">Nothing processed yet.</div></div>
+    </div>
+    <div class="card">
+      <h2>Purchase orders</h2>
+      <div id="pos" class="empty">…</div>
+    </div>
+  </aside>
+
+  <section id="detail">
+    <div class="card welcome">
+      <h2>How it works</h2>
+      <p>1. <b>Gemini reads the document</b> (PDF or a phone photo) and returns the vendor, dates, PO number, every line item and the totals, exactly as printed.</p>
+      <p>2. <b>Plain Python rules check it</b>: line maths, subtotal, total, dates, duplicates, and that the key numbers really appear in the PDF text (catches made-up values).</p>
+      <p>3. <b>It is matched to a purchase order</b>: vendor by tax ID or fuzzy name ("Harbour Office Supplies" → Harbor Office Supply LLC), PO by number even when written "P.O. #1046", then each line for quantity left and price (2% tolerance).</p>
+      <p>4. <b>Clean invoices are approved automatically.</b> Anything else waits here with the reasons. Fix a field and it is re-checked; approve or reject with a note. Approved invoices go to CSV or a webhook (n8n, Zapier, your ERP).</p>
+      <p>Pick a sample on the left to start.</p>
+    </div>
+  </section>
+</main>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = (n, cur) => n === null || n === undefined || n === "" ? "–" : Number(n).toLocaleString(undefined, {minimumFractionDigits:2, maximumFractionDigits:2}) + (cur ? " " + cur : "");
+const STATUS = { auto_approved:"Auto-approved", approved:"Approved", needs_review:"Needs review", rejected:"Rejected", failed:"Failed" };
+let selected = null, busy = false, current = null;
+
+async function api(path, opts = {}) {
+  const res = await fetch(path, opts);
+  let body = null; try { body = await res.json(); } catch {}
+  if (!res.ok) { let m = body && body.detail; if (Array.isArray(m)) m = m.map(d => d.msg).join("; "); throw new Error(m || `Request failed (${res.status})`); }
+  return body;
+}
+
+async function loadSide() {
+  try {
+    const s = await api("/api/stats");
+    $("stTotal").textContent = s.total; $("stAuto").textContent = s.auto_rate === null ? "–" : Math.round(s.auto_rate * 100) + "%";
+    $("stReview").textContent = s.by_status.needs_review || 0; $("stRejected").textContent = s.by_status.rejected || 0;
+    $("stCost").textContent = "$" + s.cost_usd.toFixed(4);
+  } catch {}
+  try {
+    const list = await api("/api/invoices");
+    $("inbox").innerHTML = list.length ? list.map(i => `<div class="row ${i.id === selected ? "sel" : ""}" data-id="${i.id}">
+        <span class="v">${esc(i.vendor_name || i.file_name)}</span><span class="pill s-${esc(i.status)}">${esc(STATUS[i.status] || i.status)}</span>
+        <span class="m">#${i.id} · ${esc(i.invoice_number || "—")} · ${fmt(i.total, i.currency)}</span>
+        <span class="m">${i.issue_count ? i.issue_count + " issue" + (i.issue_count > 1 ? "s" : "") : ""}</span></div>`).join("")
+      : `<div class="empty">Nothing processed yet.</div>`;
+  } catch {}
+  try {
+    const pos = await api("/api/purchase-orders");
+    $("pos").innerHTML = `<table><tr><th>PO</th><th>Vendor</th><th style="text-align:right">Billed / total</th></tr>${pos.map(p => `<tr>
+      <td>${esc(p.number)}${p.status !== "open" ? ` <span class="tag">${esc(p.status)}</span>` : ""}</td><td>${esc(p.vendor)}</td>
+      <td style="text-align:right">${fmt(p.billed)} / ${fmt(p.total, p.currency)}</td></tr>`).join("")}</table>`;
+  } catch (e) { $("pos").textContent = e.message; }
+}
+
+async function loadSamples() {
+  const s = await api("/api/samples");
+  $("samples").innerHTML = s.map(x => `<button class="sample" data-id="${esc(x.id)}" title="${esc(x.note)}">
+      <span class="id">${esc(x.id)}</span><span style="flex:1">${esc(x.note)}<br><span class="tag">${esc(x.vendor)} · ${x.kind === "image" ? "scan" : "PDF"}</span></span>
+      <span class="pill s-${esc(x.expected)}">${esc(STATUS[x.expected])}</span></button>`).join("");
+}
+
+function setBusy(b, label) {
+  busy = b;
+  document.querySelectorAll(".sample, #drop, .actions button").forEach(el => el.style.pointerEvents = b ? "none" : "");
+  if (b) $("detail").innerHTML = `<div class="card"><span class="spinner"></span> ${esc(label || "Reading the invoice…")}</div>`;
+}
+
+async function runSample(id) {
+  if (busy) return; setBusy(true, `Processing sample ${id}: reading the document, checking the math, matching the PO…`);
+  try { const inv = await api(`/api/samples/${id}/process`, { method: "POST" }); selected = inv.id; render(inv); }
+  catch (e) { $("detail").innerHTML = `<div class="card"><div class="msg err">${esc(e.message)}</div></div>`; }
+  finally { setBusy(false); loadSide(); }
+}
+
+async function uploadFiles(files) {
+  if (busy || !files.length) return;
+  let last = null;
+  for (const f of files) {
+    setBusy(true, `Reading ${f.name}…`);
+    const fd = new FormData(); fd.append("file", f);
+    try { last = await api("/api/invoices", { method: "POST", body: fd }); }
+    catch (e) { setBusy(false); $("detail").innerHTML = `<div class="card"><div class="msg err">${esc(f.name)}: ${esc(e.message)}</div></div>`; loadSide(); return; }
+  }
+  setBusy(false); if (last) { selected = last.id; render(last); } loadSide();
+}
+
+async function open(id) {
+  if (busy) return;
+  try { const inv = await api(`/api/invoices/${id}`); selected = id; render(inv); loadSide(); } catch (e) { alert(e.message); }
+}
+
+function flagged(issues, field) { return issues.some(i => i.field === field && i.severity !== "info"); }
+
+function render(inv) {
+  current = inv;
+  const d = inv.data || {}, m = inv.match || {}, issues = inv.issues || [];
+  const editable = inv.status === "needs_review" || inv.status === "failed";
+  const ro = editable ? "" : "readonly";
+  const field = (key, label, type = "text") => `<label class="f ${flagged(issues, key) ? "flag" : ""}">${esc(label)}
+      <input data-k="${key}" type="${type}" ${type === "number" ? 'step="0.01"' : ""} value="${esc(d[key] ?? "")}" ${ro}></label>`;
+  const lineMatch = {}; (m.lines || []).forEach(r => lineMatch[r.line] = r);
+  const lines = (d.line_items || []).map((li, i) => {
+    const r = lineMatch[i]; const bad = flagged(issues, `line_items.${i}`);
+    const tag = !m.po ? "" : !r || r.po_line_no === null ? `<span class="tag badt">not on PO</span>` :
+      r.status === "ok" ? `<span class="tag okt">PO line ${r.po_line_no} ✓</span>` : `<span class="tag badt">${esc(r.status)}</span>`;
+    const inp = (k, cls = "") => `<td class="${cls} ${bad ? "flag" : ""}"><input data-li="${i}" data-k="${k}" value="${esc(li[k] ?? "")}" ${ro}></td>`;
+    return `<tr>${inp("description")}${inp("sku")}${inp("quantity","num")}${inp("unit_price","num")}${inp("amount","num")}<td>${tag}</td></tr>`;
+  }).join("");
+  const banner = { auto_approved: "Every check passed, so this was approved automatically and posted against the PO.",
+    approved: `Approved by ${esc(inv.decided_by)}.`, needs_review: "Needs a person: fix fields below or approve / reject with a note.",
+    rejected: inv.decided_by === "rules" ? "Rejected automatically." : `Rejected by ${esc(inv.decided_by)}.`, failed: "The document could not be read." }[inv.status];
+  const isPdf = inv.mime === "application/pdf";
+  $("detail").innerHTML = `<div class="detail">
+    <div class="card" style="padding:10px"><div class="doc">${isPdf ? `<iframe src="${inv.file_url}#toolbar=0&navpanes=0&view=FitH" title="invoice"></iframe>` : `<img src="${inv.file_url}" alt="invoice">`}</div>
+      <div class="meta">${esc(inv.file_name)} · ${isPdf ? (inv.has_text_layer ? "PDF with text layer" : "PDF without text") : "image / scan"}</div></div>
+    <div class="card">
+      <div class="banner b-${esc(inv.status)}">#${inv.id} · ${esc(STATUS[inv.status])}<small>${banner}${inv.note ? " Note: " + esc(inv.note) : ""}</small></div>
+      <div id="msg"></div>
+      ${issues.length ? `<ul class="issues">${issues.map(i => `<li class="${esc(i.severity)}"><code>${esc(i.code)}</code>${esc(i.message)}</li>`).join("")}</ul>` : ""}
+      <dl class="match">
+        <dt>Vendor</dt><dd>${m.vendor ? `${esc(m.vendor.name)} <span class="tag">(${esc(m.vendor.id)}, matched by ${esc(m.vendor.method)}${m.vendor.score < 100 ? ", " + m.vendor.score + "%" : ""})</span>` : `<span class="tag badt">not matched</span>`}</dd>
+        <dt>PO</dt><dd>${m.po ? `${esc(m.po.number)} <span class="tag">(${esc(m.po_method)}${m.po.remaining_value !== undefined ? ", " + fmt(m.po.remaining_value, m.po.currency) + " left before this invoice" : ""})</span>` : `<span class="tag badt">none</span>`}</dd>
+      </dl>
+      <div class="grid">
+        ${field("vendor_name", "Vendor")}${field("vendor_tax_id", "Vendor tax ID")}
+        ${field("invoice_number", "Invoice number")}${field("po_number", "PO number (as printed)")}
+        ${field("invoice_date", "Invoice date (YYYY-MM-DD)")}${field("due_date", "Due date")}
+        ${field("currency", "Currency")}${field("subtotal", "Subtotal", "number")}
+        ${field("tax", "Tax", "number")}${field("total", "Total", "number")}
+      </div>
+      <h2 style="margin:14px 0 6px">Line items (${(d.line_items || []).length})</h2>
+      <div style="max-height:300px;overflow:auto"><table class="lines"><colgroup><col style="width:34%"><col style="width:17%"><col style="width:9%"><col style="width:13%"><col style="width:13%"><col style="width:14%"></colgroup><tr><th>Description</th><th>SKU</th><th>Qty</th><th>Unit price</th><th>Amount</th><th>PO match</th></tr>${lines || `<tr><td colspan="6" class="empty">No line items</td></tr>`}</table></div>
+      ${editable ? `<div class="actions">
+          <button id="save">Save corrections &amp; re-check</button>
+          <input id="note" placeholder="Note (why you approve or reject)" maxlength="500">
+          <button class="ok" id="approve">Approve</button><button class="bad" id="reject">Reject</button></div>` : ""}
+      <div class="meta">Read by ${esc(inv.extractor)}${inv.extract_ms ? ` in ${(inv.extract_ms / 1000).toFixed(1)} s` : ""}${inv.tokens_in ? ` · ${inv.tokens_in.toLocaleString()} / ${inv.tokens_out.toLocaleString()} tokens · $${Number(inv.cost_usd).toFixed(5)}` : ""}${inv.edited ? " · corrected by a reviewer" : ""}</div>
+    </div></div>`;
+  if (editable) {
+    $("save").onclick = save;
+    $("approve").onclick = () => decide(true);
+    $("reject").onclick = () => decide(false);
+  }
+}
+
+function collect() {
+  const d = JSON.parse(JSON.stringify(current.data || {}));
+  document.querySelectorAll("#detail input[data-k]").forEach(el => {
+    const k = el.dataset.k, num = ["subtotal","tax","total","quantity","unit_price","amount"].includes(k);
+    const v = el.value.trim() === "" ? null : (num ? Number(el.value) : el.value.trim());
+    if (el.dataset.li !== undefined) d.line_items[+el.dataset.li][k] = v; else d[k] = v;
+  });
+  return d;
+}
+
+async function save() {
+  try { render(await api(`/api/invoices/${current.id}`, { method: "PUT", headers: {"Content-Type":"application/json"}, body: JSON.stringify({ data: collect() }) })); loadSide(); }
+  catch (e) { $("msg").innerHTML = `<div class="msg err">${esc(e.message)}</div>`; }
+}
+
+async function decide(approve) {
+  try {
+    render(await api(`/api/invoices/${current.id}/decision`, { method: "POST", headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ approve, note: $("note").value.trim(), reviewer: "demo reviewer" }) }));
+    loadSide();
+  } catch (e) { $("msg").innerHTML = `<div class="msg err">${esc(e.message)}</div>`; }
+}
+
+async function init() {
+  $("samples").onclick = (e) => { const b = e.target.closest(".sample"); if (b) runSample(b.dataset.id); };
+  $("inbox").onclick = (e) => { const r = e.target.closest(".row"); if (r) open(+r.dataset.id); };
+  $("file").onchange = (e) => { uploadFiles([...e.target.files]); e.target.value = ""; };
+  const drop = $("drop");
+  ["dragenter","dragover"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("over"); }));
+  ["dragleave","drop"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("over"); }));
+  drop.addEventListener("drop", e => uploadFiles([...e.dataTransfer.files]));
+  $("reset").onclick = async () => { if (busy) return; try { await api("/api/reset", { method: "POST" }); selected = null; location.reload(); } catch (e) { alert(e.message); } };
+  try { const h = await api("/api/health"); $("extractor").textContent = h.extractor ? "extractor: " + h.extractor : "extractor: not configured"; } catch {}
+  await loadSamples(); loadSide();
+}
+init();
+</script>
+</body>
+</html>

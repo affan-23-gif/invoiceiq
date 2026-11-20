@@ -1,0 +1,42 @@
+{
+  "id": "c05",
+  "file": "c05.pdf",
+  "layout": "modern",
+  "kind": "pdf",
+  "note": "No PO number printed: the PO is found from vendor and amount, so a person confirms.",
+  "requires": [],
+  "expect": {
+    "decision": "needs_review",
+    "issues": [
+      "PO_INFERRED"
+    ]
+  },
+  "truth": {
+    "vendor_name": "SUNRISE COFFEE ROASTERS",
+    "vendor_tax_id": "US-27-5519034",
+    "invoice_number": "SCR-4410",
+    "invoice_date": "2026-11-07",
+    "due_date": "2026-12-07",
+    "po_number": null,
+    "currency": "USD",
+    "line_items": [
+      {
+        "sku": "SCR-ESP-1",
+        "description": "Espresso blend beans 1kg",
+        "quantity": 30,
+        "unit_price": 24.5,
+        "amount": 735.0
+      },
+      {
+        "sku": "SCR-DEC-1",
+        "description": "Decaf beans 1kg",
+        "quantity": 10,
+        "unit_price": 26.0,
+        "amount": 260.0
+      }
+    ],
+    "subtotal": 995.0,
+    "tax": 0.0,
+    "total": 995.0
+  }
+}

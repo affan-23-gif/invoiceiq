@@ -1,0 +1,40 @@
+{
+  "id": "c13",
+  "file": "c13.jpg",
+  "layout": "classic",
+  "kind": "image",
+  "note": "Clean invoice, scanned.",
+  "requires": [],
+  "expect": {
+    "decision": "auto_approved",
+    "issues": []
+  },
+  "truth": {
+    "vendor_name": "Harbor Office Supply LLC",
+    "vendor_tax_id": "US-41-2290871",
+    "invoice_number": "HOS-21044",
+    "invoice_date": "2026-11-14",
+    "due_date": "2026-12-14",
+    "po_number": "PO-1048",
+    "currency": "USD",
+    "line_items": [
+      {
+        "sku": "HOS-CHR-ERG",
+        "description": "Ergonomic office chair",
+        "quantity": 8,
+        "unit_price": 245.0,
+        "amount": 1960.0
+      },
+      {
+        "sku": "HOS-ARM-2",
+        "description": "Dual monitor arm",
+        "quantity": 8,
+        "unit_price": 64.0,
+        "amount": 512.0
+      }
+    ],
+    "subtotal": 2472.0,
+    "tax": 203.94,
+    "total": 2675.94
+  }
+}

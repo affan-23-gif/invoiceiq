@@ -1,0 +1,35 @@
+{
+  "id": "c11",
+  "file": "c11.pdf",
+  "layout": "classic",
+  "kind": "pdf",
+  "note": "Bills against a PO that is already closed.",
+  "requires": [],
+  "expect": {
+    "decision": "needs_review",
+    "issues": [
+      "PO_CLOSED"
+    ]
+  },
+  "truth": {
+    "vendor_name": "Tidewater Cleaning Co.",
+    "vendor_tax_id": "US-63-7720118",
+    "invoice_number": "TW-3391",
+    "invoice_date": "2026-11-12",
+    "due_date": "2026-12-12",
+    "po_number": "PO-1047",
+    "currency": "USD",
+    "line_items": [
+      {
+        "sku": "TW-OFF-OCT",
+        "description": "Office cleaning, October",
+        "quantity": 1,
+        "unit_price": 1150.0,
+        "amount": 1150.0
+      }
+    ],
+    "subtotal": 1150.0,
+    "tax": 0.0,
+    "total": 1150.0
+  }
+}
