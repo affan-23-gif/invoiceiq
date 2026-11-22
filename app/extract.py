@@ -109,12 +109,18 @@ class GeminiExtractor:
         )
         parts = [types.Part.from_bytes(data=content, mime_type=mime), PROMPT]
         t0 = time.perf_counter()
-        resp = self._call(parts, config)
+        for attempt in range(2):  # a truncated or empty JSON answer gets one more try
+            resp = self._call(parts, config)
+            try:
+                raw = json.loads(resp.text or "")
+                if isinstance(raw, dict):
+                    break
+                raise ValueError("expected a JSON object")
+            except ValueError as exc:
+                if attempt == 1:
+                    reason = getattr((resp.candidates or [None])[0], "finish_reason", None)
+                    raise ExtractionError(f"Model did not return valid JSON (finish reason: {reason}): {exc}") from exc
         ms = int((time.perf_counter() - t0) * 1000)
-        try:
-            raw = json.loads(resp.text or "{}")
-        except ValueError as exc:
-            raise ExtractionError(f"Model did not return valid JSON: {exc}") from exc
         usage = resp.usage_metadata
         return Extraction(
             data=_clean(raw), ms=ms,
@@ -133,9 +139,11 @@ class GeminiExtractor:
                 if "PerDay" in msg or "per day" in msg.lower():
                     raise DailyQuotaExceeded(
                         "Gemini free-tier daily limit reached. It resets at midnight Pacific time (1:30 PM IST).") from exc
-                retryable = any(s in msg for s in ("429", "RESOURCE_EXHAUSTED", "500", "503", "UNAVAILABLE", "DEADLINE"))
+                retryable = any(s in msg for s in ("429", "RESOURCE_EXHAUSTED", "500", "502", "503", "504", "UNAVAILABLE",
+                                                   "DEADLINE", "INTERNAL", "overloaded", "timed out", "Timeout",
+                                                   "disconnect", "Connection", "reset by peer"))
                 if not retryable or attempt == 4:
-                    raise ExtractionError(msg[:500]) from exc
+                    raise ExtractionError(f"{type(exc).__name__}: {msg[:500]}") from exc
                 m = re.search(r"retry in ([\d.]+)s|retryDelay['\"]?: ?['\"]?(\d+)", msg)
                 time.sleep(min(float(m.group(1) or m.group(2)) + 1 if m else delay, 65))
                 delay *= 2

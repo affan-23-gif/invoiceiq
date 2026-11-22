@@ -116,10 +116,13 @@ def run(extractor_name: str, cases: list[dict]) -> dict:
                "decision": inv["status"], "expected_decision": want["decision"], "decision_ok": inv["status"] == want["decision"],
                "issues": got_codes, "expected_issues": want["issues"], "problem_caught": caught, "false_alarms": false_alarms,
                "seconds": round(secs, 2), "cost_usd": inv.get("cost_usd", 0)}
+        if inv["status"] == "failed":
+            row["error"] = inv["issues"][0]["message"]
         rows.append(row)
         print(f"  {case['id']} {case['kind']:<5} fields {row['fields_ok']}/{len(HEADER)}  lines {hit}/{exp}  "
               f"{'OK ' if row['decision_ok'] else 'BAD'} {inv['status']:<13} {got_codes}"
-              + (f"  wrong: {row['wrong_fields']}" if row["wrong_fields"] else ""))
+              + (f"\n      error: {row['error']}" if row.get("error") else
+                 (f"  wrong: {row['wrong_fields']}" if row["wrong_fields"] else "")))
     n = len(rows)
     if not n:
         return {"extractor": ex.name, "rows": []}
@@ -170,6 +173,8 @@ def report(results: list[dict]) -> str:
                 notes.append("wrong: " + ", ".join(row["wrong_fields"]))
             if row["false_alarms"]:
                 notes.append("extra: " + ", ".join(row["false_alarms"]))
+            if row.get("error"):
+                notes.append("extraction failed: " + row["error"][:120].replace("|", "/"))
             if not row["problem_caught"]:
                 notes.append("missed: " + ", ".join(sorted(set(row["expected_issues"]) - set(row["issues"]))))
             lines.append(f"| {row['id']} | {row['kind']}, {row['layout']} | {row['fields_ok']}/{row['fields_total']} | "
