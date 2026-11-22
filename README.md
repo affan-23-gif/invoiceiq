@@ -7,7 +7,7 @@ spelled out.
 The AI only *reads* the document. Whether an invoice gets paid is decided by plain Python rules a finance team can
 audit. That split is the whole design.
 
-**Live demo:** _add your Render URL here_ (free hosting, so the first load can take about a minute)
+**Live demo:** https://invoiceiq-jav0.onrender.com (free hosting, so the first load can take about a minute)
 
 ![InvoiceIQ review console](docs/console.png)
 
