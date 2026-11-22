@@ -40,7 +40,21 @@ audit. That split is the whole design.
 closed PO, missing PO number). It scores every field and every line item against ground truth, plus the final
 decision. See [eval/results.md](eval/results.md).
 
-_Results table: run the eval and paste the summary here._
+Latest run, with `gemini-3.5-flash-lite`:
+
+| Metric | Gemini (InvoiceIQ) | Regex baseline |
+|---|---|---|
+| Header fields correct (9 per invoice) | **100%** | 69% |
+| …on scanned photos | **100%** | 0% |
+| Line items extracted correctly | **100%** (all 64 lines) | 0% |
+| Final decision correct (approve / review / reject) | **18 / 18** | 9 / 18 |
+| Planted problems caught | **8 / 8** | 4 / 8 |
+| Clean invoices approved with no human touch | **10 / 10** | 2 / 10 |
+| Cost for all 18 invoices | **$0.0046** | $0 |
+
+The first Gemini run read 15 of the 18 invoices perfectly, but 3 failed with an error that wasn't shown.
+Since then, extraction retries once on empty or truncated JSON, network drops and 5xx errors are retryable,
+and the eval prints the reason for any failure. After that change: 18/18.
 
 The baseline is what most teams try first: regexes on the PDF text. Even when it is tuned to these exact layouts,
 it can't read scans or table rows, so line-item checks and PO matching never get the data they need.
